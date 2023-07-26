@@ -17,7 +17,7 @@ export default function BottomTabNavigations() {
           }
           const iconName = getIconName();
 
-          return <TabIcon iconName={iconName} iconColor={focused ? "tomato" : "gray"} />;
+          return <TabIcon iconName={iconName} iconColor={color} />;
         },
       })}
     >
