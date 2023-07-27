@@ -8,11 +8,22 @@ import { CustomButton } from "../components/CustomButton";
 import { Icon } from "../components/Icons";
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from "expo-media-library";
+import { useDispatch } from "react-redux";
+import { onClickFavorite } from "../actions/favorite";
+import { useSelector } from "react-redux";
 
 export default function ImageDetailScreen() {
   const navigation = useNavigation();
   const route = useRoute();
   const [downloading, setDownloading] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const onPressFavorite = useCallback(() => {
+    console.log("on press favorite");
+    dispatch(onClickFavorite(route.params.url));
+  }, []);
+
   const onPressBack = useCallback(() => {
     navigation.goBack();
   }, []);
@@ -46,6 +57,9 @@ export default function ImageDetailScreen() {
   }, []);
 
   const { width } = useWindowDimensions();
+  const isFavorite = useSelector((state) => {
+    return state.favorite.favoriteList.filter((item) => item === route.params.url).length > 0;
+  });
 
   return (
     <View style={{ flex: 1 }}>
@@ -54,6 +68,7 @@ export default function ImageDetailScreen() {
           <Header.Icon iconName={"arrow-back"} onPress={onPressBack} />
           <Header.Title title={"Image Detail"} />
         </Header.Group>
+        <Header.Icon iconName={isFavorite ? "heart" : "heart-outline"} onPress={onPressFavorite} />
       </Header>
 
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
